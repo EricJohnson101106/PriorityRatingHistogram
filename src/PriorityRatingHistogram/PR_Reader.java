@@ -15,7 +15,7 @@ public class PR_Reader {
 
     public static void main(String[] args) throws Exception, SQLException {
 
-        File sourceFile = new File("C:\\Users\\Flidro\\IdeaProjects\\Priority Rating Histogram\\src\\Priority_Rating_Histogram\\CEPGP.lua");
+        File sourceFile = new File("C:\\Users\\Flidro\\IdeaProjects\\PriorityRatingHistogram\\src\\PriorityRatingHistogram\\CEPGP.lua");
 
         //Connect to the MySQL database
         EJSQLConnectionHandler connectionHandler = new EJSQLConnectionHandler();
@@ -23,7 +23,8 @@ public class PR_Reader {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = conn.prepareStatement("INSERT INTO `data`(`target_name`,`awarded_by`,`award_message`,`ep_before`,`ep_after`,`gp_before`,`gp_after`,`item_awarded`) VALUES (?,?,?,?,?,?,?,?)");
-            preparedStatement.setString(8, "");
+            preparedStatement.setString(8, ""); //Initializing paramIndex 8 to an empty string since not all LUA tables go to 8. Prevents issues. Only writes the first record. The rest are handled within the loop
+
             String startToken = "TRAFFIC = {"; //start of the filter
             String endToken = "CEPGP_raid_logs = {"; //end of the filter
             boolean trimToken = false;
@@ -62,9 +63,11 @@ public class PR_Reader {
                         //Don't want to write } to the database but still want to use it to distinguish between
                         //the LUA tables
                         writeToken = false;
-                        cellCounter = 1; //revert the cellCounter back to 0 when the LUA table closes. Used for writing to DB
+                        cellCounter = 1; //revert the cellCounter back to 1 when the LUA table closes. Used for writing to DB
                         //TODO double sends the final preparedStatement. Likely an issue with the endToken since the TRAFFIC = { } table has that closing brace as well
                         preparedStatement.execute(); //execute with whatever is loaded into the PreparedStatement before looping back
+                        preparedStatement.setString(8, ""); //Initializing paramIndex 8 of the preparedStatement to an empty string since not all of the LUA tables have 8 records. Only overwrites after the previous statement is executed.
+
                     } else if (writeToken) {
                         //If writeToken is true, write the line to the Database.
                         // Using the preparedStatement initialized above.
