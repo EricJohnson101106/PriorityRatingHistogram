@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="EPGP_Transactions:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/EPGP_Transactions_war_exploded</output-path>
+  <artifact type="exploded-war" name="PriorityRatingHistogram:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/PriorityRatingHistogram_war_exploded</output-path>
     <root id="root">
       <element id="javaee-facet-resources" facet="PriorityRatingHistogram/web/Web" />
       <element id="directory" name="WEB-INF">
