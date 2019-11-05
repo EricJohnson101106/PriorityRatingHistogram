@@ -13,7 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@WebServlet(name = "Table2Servlet")
+@WebServlet(name = "TableServlet")
 public class TableServlet extends HttpServlet {
 
 
